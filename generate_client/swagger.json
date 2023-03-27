@@ -1,0 +1,243 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SCPR.Server.REST",
+    "version": "1.0"
+  },
+  "paths": {
+    "/SCPR": {
+      "post": {
+        "tags": [
+          "SCPR"
+        ],
+        "operationId": "Train",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainingRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainingRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DoubleRange": {
+        "type": "object",
+        "properties": {
+          "lowerBound": {
+            "type": "number",
+            "format": "double"
+          },
+          "upperBound": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SCPRModelType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "SCPRParameters": {
+        "type": "object",
+        "properties": {
+          "modelType": {
+            "$ref": "#/components/schemas/SCPRModelType"
+          },
+          "degree": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "alpha": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "lambda": {
+            "type": "number",
+            "format": "double"
+          },
+          "shuffledRestarts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxVariablesInInteraction": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inputVariableScaling": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DoubleRange"
+            },
+            "nullable": true
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShapeConstraint"
+            },
+            "nullable": true
+          },
+          "algorithmIdentifier": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "algorithmVersion": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "maxSDPSolverIterations": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "positivstellensatzPolyDegree": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minCoeffValue": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShapeConstraint": {
+        "required": [
+          "variableName"
+        ],
+        "type": "object",
+        "properties": {
+          "variableName": {
+            "type": "string"
+          },
+          "orderDerivative": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "interval": {
+            "$ref": "#/components/schemas/DoubleRange"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrainingRequest": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "nullable": true
+          },
+          "y": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            },
+            "nullable": true
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "target": {
+            "type": "string",
+            "nullable": true
+          },
+          "algorithmParameters": {
+            "$ref": "#/components/schemas/SCPRParameters"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Version": {
+        "type": "object",
+        "properties": {
+          "major": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "build": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "majorRevision": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "minorRevision": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

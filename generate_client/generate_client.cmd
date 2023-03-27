@@ -1,0 +1,2 @@
+curl https://localhost:7265/swagger/v1/swagger.json -o swagger.json
+java -jar -Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true openapi-generator-cli.jar generate -i ./swagger.json -g python -o ../ 
